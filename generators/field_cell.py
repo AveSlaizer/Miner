@@ -52,5 +52,4 @@ class FieldCell:
         return "Откр"
 
     def change_status(self):
-        if self.__status:
-            self.__status = False
+        self.__status = False
