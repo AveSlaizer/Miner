@@ -43,15 +43,13 @@ class FieldGenerator:
                 temp_count += 1
         return tuple(mine_tpl)
 
-    def full_made_field(self) -> List[List[FieldCell]]:
+    def get_field_with_mines(self) -> List[List[FieldCell]]:
         """
-        Возвращает поле с подсказками вокруг мин
+        Возвращает поле с расставленными минами
 
         :return:
-                List[List[int]]: Поле с минами и подсказками
         """
         mine_coordinates = self.get_mine_coordinates_tpl()
-
         field = []
         for j in range(self.__rows):
             temp_list = []
@@ -61,15 +59,24 @@ class FieldGenerator:
                     cell.set_mine()
                 temp_list.append(cell)
             field.append(temp_list)
+        return field
+
+    def full_made_field(self) -> List[List[FieldCell]]:
+        """
+        Возвращает поле с подсказками вокруг мин
+
+        :return:
+                List[List[int]]: Поле с минами и подсказками
+        """
+
+        field = self.get_field_with_mines()
 
         # Ищем соседние с миной ячейки и генерируем там числа-подсказки
-
         rows = len(field)
         for i in range(rows):
             columns = len(field[i])
             for j in range(columns):
                 if field[i][j].is_mine():
-                    # Временные значения
                     temp_i = i
                     temp_j = j
                     # Идем по диапазонам от -1 до 1 от текущих значений i и j
