@@ -5,13 +5,10 @@ def execute_application():
     field = FieldGenerator(10, 10, 8)
     #print(field)
 
-    empty_field = field.get_empty_field()
+    mines = field.get_mine_coordinates()
 
-    for row in empty_field:
-        for item in row:
-            item.info()
-            #print(item, end="  ")
-        print()
+    print(mines)
+
 
 
 

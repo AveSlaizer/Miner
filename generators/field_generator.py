@@ -1,5 +1,5 @@
 from random import randint
-from typing import List
+from typing import List, Tuple
 from .field_cell import FieldCell
 
 
@@ -38,7 +38,7 @@ class FieldGenerator:
         return [[FieldCell(row = j, column = i) for i in range(self.__columns)] for j in range(self.rows)]
 
 
-    def get_mine_coordinates(self) -> List[List[int]]:
+    def get_mine_coordinates(self) -> Tuple[Tuple[int, int], ...]:
         """
         Возвращает список с уникальными координтами мин в виде [x, y]
 
@@ -46,16 +46,15 @@ class FieldGenerator:
         :param columns (int): Ширина
         :param rows (int): Высота
         :return:
-                List[List[int]]: Список уникальных списоков с координатами мин
+                Tuple[Tuple[int, int], ...]: Кортеж уникальных кортежей с координатами мин
         """
-        mine_list = []
+        mine_tpl = []
         temp_count = 0
         while temp_count < self.__mines_qty:
             mine_col = randint(0, self.__columns - 1)
             mine_row = randint(0, self.__rows - 1)
-            mine_coordinate = [mine_col, mine_row]
-            if mine_coordinate not in mine_list:
-                mine_list.append(mine_coordinate)
+            mine_coordinate = (mine_col, mine_row)
+            if mine_coordinate not in mine_tpl:
+                mine_tpl.append(mine_coordinate)
                 temp_count += 1
-        return mine_list
-
+        return tuple(mine_tpl)
