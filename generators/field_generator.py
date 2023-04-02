@@ -8,7 +8,11 @@ class FieldGenerator:
     def __init__(self, rows: int = None, columns: int = None, mines_qty: int = None):
         self.__rows = rows
         self.__columns = columns
-        self.__mines_qty = mines_qty
+        print(self.__rows * self.__columns)
+        if self.__rows * self.__columns > mines_qty:
+            self.__mines_qty = mines_qty
+        else:
+            raise Exception("Невозможно установить такое количество мин")
 
     def __str__(self):
         return f"Поле {self.__rows} рядов на {self.__columns} столбцов, {self.__mines_qty} мин."
@@ -25,7 +29,7 @@ class FieldGenerator:
     def mines_qty(self):
         return self.__mines_qty
 
-    def get_mine_coordinates_tpl(self) -> Tuple[Tuple[int, int], ...]:
+    def __get_mine_coordinates_tpl(self) -> Tuple[Tuple[int, int], ...]:
         """
         Возвращает кортеж с уникальными координатами мин в виде (x, y)
 
@@ -43,13 +47,13 @@ class FieldGenerator:
                 temp_count += 1
         return tuple(mine_tpl)
 
-    def get_field_with_mines(self) -> List[List[FieldCell]]:
+    def __get_field_with_mines(self) -> List[List[FieldCell]]:
         """
         Возвращает поле с расставленными минами
 
         :return:
         """
-        mine_coordinates = self.get_mine_coordinates_tpl()
+        mine_coordinates = self.__get_mine_coordinates_tpl()
         field = []
         for j in range(self.__rows):
             temp_list = []
@@ -61,7 +65,7 @@ class FieldGenerator:
             field.append(temp_list)
         return field
 
-    def full_made_field(self) -> List[List[FieldCell]]:
+    def make_field(self) -> List[List[FieldCell]]:
         """
         Возвращает поле с подсказками вокруг мин
 
@@ -69,7 +73,7 @@ class FieldGenerator:
                 List[List[int]]: Поле с минами и подсказками
         """
 
-        field = self.get_field_with_mines()
+        field = self.__get_field_with_mines()
 
         # Ищем соседние с миной ячейки и генерируем там числа-подсказки
         rows = len(field)

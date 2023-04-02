@@ -3,7 +3,7 @@ from generators.field_generator import FieldGenerator
 
 
 def execute_application():
-    field = FieldGenerator(15, 10, 38).full_made_field()
+    field = FieldGenerator(10, 10, 99).make_field()
 
     FieldGenerator.print_field(field)
 
