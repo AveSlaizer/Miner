@@ -87,3 +87,17 @@ class FieldGenerator:
                                 field[k][l].increase_value()
 
         return field
+
+    @staticmethod
+    def print_field(field: List[List[FieldCell]]) -> None:
+        """
+        Печатает в консоль поле с минами и подсказками
+
+        :param field (List[List[FieldCell]]): Поле с минами и подсказками
+        :return:
+                None
+        """
+        for row in field:
+            for cell in row:
+                print(cell, end="  ")
+            print()
