@@ -38,13 +38,10 @@ class FieldGenerator:
         return [[FieldCell(row = j, column = i) for i in range(self.__columns)] for j in range(self.rows)]
 
 
-    def get_mine_coordinates(self) -> Tuple[Tuple[int, int], ...]:
+    def get_mine_coordinates_tpl(self) -> Tuple[Tuple[int, int], ...]:
         """
-        Возвращает список с уникальными координтами мин в виде [x, y]
+        Возвращает кортеж с уникальными координатами мин в виде (x, y)
 
-        :param quantity (int): Количество мин
-        :param columns (int): Ширина
-        :param rows (int): Высота
         :return:
                 Tuple[Tuple[int, int], ...]: Кортеж уникальных кортежей с координатами мин
         """
@@ -66,7 +63,7 @@ class FieldGenerator:
         :return:
                 List[List[int]]: Поле с минами
         """
-        mine_coordinates = self.get_mine_coordinates()
+        mine_coordinates = self.get_mine_coordinates_tpl()
         field = [[0 for i in range(self.__columns)] for j in range(self.rows)]
 
         for coordinate in mine_coordinates:
@@ -77,11 +74,21 @@ class FieldGenerator:
         """
         Возвращает поле с подсказками вокруг мин
 
-        :param pole List[List[int]]: Поле с минами
         :return:
                 List[List[int]]: Поле с минами и подсказками
         """
-        field = self.place_mines()
+        mine_coordinates = self.get_mine_coordinates_tpl()
+
+        field = []
+        for j in range(self.__rows):
+            temp_list = []
+            for i in range(self.__columns):
+                if (i, j) in mine_coordinates:
+                    value = -1
+                else:
+                    value = 0
+                temp_list.append(value)
+            field.append(temp_list)
 
         # Ищем соседние с миной ячейки и генерируем там числа-подсказки
         height = len(field)
