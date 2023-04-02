@@ -26,16 +26,7 @@ class FieldGenerator:
         return self.__mines_qty
 
 
-    def get_empty_field(self) -> List[List[FieldCell]]:
-        """
-        Возвращает двумерный список widht x height заполненный нулями (пустое поле)
 
-        :param columns (int): Ширина
-        :param rows (int): Высота
-        :return:
-                List[List[int]]: Двумерный список из объектов класса FieldCell
-        """
-        return [[FieldCell(row = j, column = i) for i in range(self.__columns)] for j in range(self.rows)]
 
 
     def get_mine_coordinates_tpl(self) -> Tuple[Tuple[int, int], ...]:
@@ -56,19 +47,7 @@ class FieldGenerator:
                 temp_count += 1
         return tuple(mine_tpl)
 
-    def place_mines(self) -> List[List[int]]:
-        """
-        Возвращает поле с расставленными минами
 
-        :return:
-                List[List[int]]: Поле с минами
-        """
-        mine_coordinates = self.get_mine_coordinates_tpl()
-        field = [[0 for i in range(self.__columns)] for j in range(self.rows)]
-
-        for coordinate in mine_coordinates:
-            field[coordinate[1]][coordinate[0]] = -1
-        return field
 
     def full_made_field(self) -> List[List[int]]:
         """
