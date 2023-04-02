@@ -31,6 +31,15 @@ class FieldCell:
         else:
             raise Exception("В ячейке установлена мина")
 
+    def print_status(self):
+        if self.__status:
+            print("Закр.")
+        else:
+            print("Откр.")
+
+    def change_status(self):
+        self.__status = False
+
     @property
     def value(self):
         return self.__value
@@ -57,9 +66,4 @@ class FieldCell:
 
     @property
     def status(self):
-        if self.__status:
-            return "Закр"
-        return "Откр"
-
-    def change_status(self):
-        self.__status = False
+        return self.__status
