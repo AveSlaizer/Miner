@@ -7,6 +7,8 @@ class FieldCell:
         self.__status = status
 
     def __str__(self):
+        if self.__value == -1:
+            return "*"
         return f"{self.__value}"
 
     def info(self):
@@ -17,7 +19,11 @@ class FieldCell:
     def set_mine(self):
         if self.__value == 0:
             self.__value = -1
-        raise Exception("Для установки мины значение ячейки должно быть равным 0")
+        else:
+            raise Exception("Для установки мины значение ячейки должно быть равным 0")
+
+    def is_mine(self):
+        return self.__value == -1
 
     def increase_value(self):
         if self.__value >= 0:
@@ -29,9 +35,13 @@ class FieldCell:
     def value(self):
         return self.__value
 
+    @value.setter
+    def value(self, value: int):
+        self.__value = value
+
     @property
     def row(self):
-        return self.row
+        return self.__row
 
     @row.setter
     def row(self, row: int):

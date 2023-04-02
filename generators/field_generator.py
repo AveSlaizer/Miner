@@ -25,10 +25,6 @@ class FieldGenerator:
     def mines_qty(self):
         return self.__mines_qty
 
-
-
-
-
     def get_mine_coordinates_tpl(self) -> Tuple[Tuple[int, int], ...]:
         """
         Возвращает кортеж с уникальными координатами мин в виде (x, y)
@@ -47,9 +43,7 @@ class FieldGenerator:
                 temp_count += 1
         return tuple(mine_tpl)
 
-
-
-    def full_made_field(self) -> List[List[int]]:
+    def full_made_field(self) -> List[List[FieldCell]]:
         """
         Возвращает поле с подсказками вокруг мин
 
@@ -62,19 +56,19 @@ class FieldGenerator:
         for j in range(self.__rows):
             temp_list = []
             for i in range(self.__columns):
+                cell = FieldCell(row=j, column=i)
                 if (i, j) in mine_coordinates:
-                    value = -1
-                else:
-                    value = 0
-                temp_list.append(value)
+                    cell.set_mine()
+                temp_list.append(cell)
             field.append(temp_list)
 
         # Ищем соседние с миной ячейки и генерируем там числа-подсказки
-        height = len(field)
-        for i in range(height):
-            widht = len(field[i])
-            for j in range(widht):
-                if field[i][j] == -1:
+
+        rows = len(field)
+        for i in range(rows):
+            columns = len(field[i])
+            for j in range(columns):
+                if field[i][j].is_mine():
                     # Временные значения
                     temp_i = i
                     temp_j = j
@@ -82,11 +76,7 @@ class FieldGenerator:
                     for k in range(temp_i - 1, temp_i + 2):
                         for l in range(temp_j - 1, temp_j + 2):
                             # Проверяем позицию ячейки, содержание в ней мины
-                            if 0 <= k < height and 0 <= l < widht and field[k][l] != -1:
-                                field[k][l] += 1
+                            if 0 <= k < rows and 0 <= l < columns and not field[k][l].is_mine():
+                                field[k][l].increase_value()
+
         return field
-
-
-
-
-
