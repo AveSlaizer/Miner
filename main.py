@@ -1,7 +1,10 @@
+from generators.field_generator import FieldGenerator
 
 
 def execute_application():
-    pass
+    field = FieldGenerator(10, 10, 99).make_field()
+
+    FieldGenerator.print_field(field)
 
 
 if __name__ == "__main__":
