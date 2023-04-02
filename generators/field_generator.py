@@ -58,7 +58,7 @@ class FieldGenerator:
         for j in range(self.__rows):
             temp_list = []
             for i in range(self.__columns):
-                cell = FieldCell(row=j, column=i)
+                cell = FieldCell(row = j, column = i)
                 if (i, j) in mine_coordinates:
                     cell.set_mine()
                 temp_list.append(cell)
@@ -75,7 +75,6 @@ class FieldGenerator:
 
         field = self.__get_field_with_mines()
 
-        # Ищем соседние с миной ячейки и генерируем там числа-подсказки
         rows = len(field)
         for i in range(rows):
             columns = len(field[i])

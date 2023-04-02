@@ -1,4 +1,3 @@
-from generators.field_cell import FieldCell
 from generators.field_generator import FieldGenerator
 
 
