@@ -12,7 +12,7 @@ class FieldCell:
     def info(self):
         print(f"Значение: {self.__value}\n"
               f"Адресс: строка {self.__row} столбец {self.__column}\n"
-              f"Статус: {FieldCell.status}")
+              f"Статус: {self.status}")
 
     def set_mine(self):
         if self.__value == 0:
@@ -22,7 +22,8 @@ class FieldCell:
     def increase_value(self):
         if self.__value >= 0:
             self.__value += 1
-        raise Exception("В ячейке установлена мина")
+        else:
+            raise Exception("В ячейке установлена мина")
 
     @property
     def value(self):
@@ -50,7 +51,6 @@ class FieldCell:
             return "Закр"
         return "Откр"
 
-
-
-
-
+    def change_status(self):
+        if self.__status:
+            self.__status = False
