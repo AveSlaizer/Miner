@@ -26,7 +26,7 @@ class FieldGenerator:
         return self.__mines_qty
 
 
-    def get_empty_pole(self) -> List[List[FieldCell]]:
+    def get_empty_field(self) -> List[List[FieldCell]]:
         """
         Возвращает двумерный список widht x height заполненный нулями (пустое поле)
 
