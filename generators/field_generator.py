@@ -5,17 +5,29 @@ from .field_cell import FieldCell
 
 class FieldGenerator:
 
-    def __init__(self, rows: int = None, columns: int = None, mines_qty: int = None):
-        self.__rows = rows
-        self.__columns = columns
-        print(self.__rows * self.__columns)
-        if self.__rows * self.__columns > mines_qty:
-            self.__mines_qty = mines_qty
-        else:
-            raise Exception("Невозможно установить такое количество мин")
+    def __init__(self, rows: int, columns: int, mines_qty: int):
+        self.__rows = self.__field_side_validator(rows)
+        self.__columns = self.__field_side_validator(columns)
+        self.__mines_qty = self.__mine_quantity_validator(mines_qty)
 
-    def __str__(self):
+    def info(self):
         return f"Поле {self.__rows} рядов на {self.__columns} столбцов, {self.__mines_qty} мин."
+
+    @staticmethod
+    def __field_side_validator(value: int):
+        if not isinstance(value, int):
+            raise ValueError(f"Недопустимый тип данных '{value.__class__.__name__}'. Ожидался 'int'.")
+        if value < 2:
+            raise ValueError(f"Недопустимое значение стороны поля: '{value}'. Ожидалось число больше, чем '2'.")
+        return value
+
+    def __mine_quantity_validator(self, mines_qty: int):
+        if not isinstance(mines_qty, int):
+            raise ValueError(f"Недопустимый тип данных '{mines_qty.__class__.__name__}'. Ожидался 'int'.")
+        if not 0 < mines_qty < self.__rows * self.__columns:
+            raise ValueError(f"Недопустимое количество мин: '{mines_qty}'. "
+                             f"Ожидалось число от '1' до '{self.__rows * self.__columns}'.")
+        return mines_qty
 
     @property
     def rows(self):
@@ -58,7 +70,7 @@ class FieldGenerator:
         for j in range(self.__rows):
             temp_list = []
             for i in range(self.__columns):
-                cell = FieldCell(row = j, column = i)
+                cell = FieldCell(row=j, column=i)
                 if (i, j) in mine_coordinates:
                     cell.set_mine()
                 temp_list.append(cell)
