@@ -4,12 +4,13 @@ from .field_cell import FieldCell
 
 
 class FieldGenerator:
+    __field: List[List[FieldCell]]
 
     def __init__(self, rows: int, columns: int, mines_qty: int):
         self.__rows = self.__field_side_validator(rows)
         self.__columns = self.__field_side_validator(columns)
         self.__mines_qty = self.__mine_quantity_validator(mines_qty)
-        self.__field = self.__make_field()
+        self.__make_field()
 
     def info(self):
         print(f"Поле {self.__rows} рядов на {self.__columns} столбцов, {self.__mines_qty} мин.")
@@ -71,23 +72,22 @@ class FieldGenerator:
         """
         return [[FieldCell(column=c, row=r) for c in range(self.__columns)] for r in range(self.__rows)]
 
-    def __make_field(self) -> List[List[FieldCell]]:
+    def __make_field(self):
         """
         Возвращает поле с расставленными минами и подсказками
         :return:
                 field: (List[List[FieldCell]]) Поле
         """
         mine_coordinates = self.__get_mine_coordinates_tpl()
-        field = self.__empty_field_generator()
+        self.__field = self.__empty_field_generator()
         for coord in mine_coordinates:
             r = coord[0]  # Row
             c = coord[1]  # Column
-            field[c][r].set_mine()
+            self.__field[c][r].set_mine()
             for k in range(c - 1, c + 2):
                 for l in range(r - 1, r + 2):
-                    if 0 <= k < self.__rows and 0 <= l < self.__columns and not field[k][l].is_mine():
-                        field[k][l].increase_value()
-        return field
+                    if 0 <= k < self.__rows and 0 <= l < self.__columns and not self.__field[k][l].is_mine():
+                        self.__field[k][l].increase_value()
 
     def print_field(self) -> None:
         """
