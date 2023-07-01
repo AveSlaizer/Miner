@@ -9,9 +9,10 @@ class FieldGenerator:
         self.__rows = self.__field_side_validator(rows)
         self.__columns = self.__field_side_validator(columns)
         self.__mines_qty = self.__mine_quantity_validator(mines_qty)
+        self.__field = self.__make_field()
 
     def info(self):
-        return f"Поле {self.__rows} рядов на {self.__columns} столбцов, {self.__mines_qty} мин."
+        print(f"Поле {self.__rows} рядов на {self.__columns} столбцов, {self.__mines_qty} мин.")
 
     @staticmethod
     def __field_side_validator(value: int):
@@ -24,7 +25,7 @@ class FieldGenerator:
     def __mine_quantity_validator(self, mines_qty: int):
         if not isinstance(mines_qty, int):
             raise ValueError(f"Недопустимый тип данных '{mines_qty.__class__.__name__}'. Ожидался 'int'.")
-        if not 0 < mines_qty < self.__rows * self.__columns:
+        if not 0 < mines_qty <= self.__rows * self.__columns:
             raise ValueError(f"Недопустимое количество мин: '{mines_qty}'. "
                              f"Ожидалось число от '1' до '{self.__rows * self.__columns}'.")
         return mines_qty
@@ -41,10 +42,13 @@ class FieldGenerator:
     def mines_qty(self):
         return self.__mines_qty
 
+    @property
+    def field(self):
+        return self.__field
+
     def __get_mine_coordinates_tpl(self) -> Tuple[Tuple[int, int], ...]:
         """
-        Возвращает кортеж с уникальными координатами мин в виде (x, y)
-
+        Возвращает кортеж с уникальными координатами мин в виде (column, row)
         :return:
                 Tuple[Tuple[int, int], ...]: Кортеж уникальных кортежей с координатами мин
         """
@@ -59,60 +63,37 @@ class FieldGenerator:
                 temp_count += 1
         return tuple(mine_tpl)
 
-    def __get_field_with_mines(self) -> List[List[FieldCell]]:
+    def __empty_field_generator(self) -> List[List[FieldCell]]:
         """
-        Возвращает поле с расставленными минами
-
+        Возвращает поле rows рядов, column столбцов с пустыми ячейками FieldCell
         :return:
+                List[List[FieldCell]]
+        """
+        return [[FieldCell(column=c, row=r) for c in range(self.__columns)] for r in range(self.__rows)]
+
+    def __make_field(self) -> List[List[FieldCell]]:
+        """
+        Возвращает поле с расставленными минами и подсказками
+        :return:
+                field: (List[List[FieldCell]]) Поле
         """
         mine_coordinates = self.__get_mine_coordinates_tpl()
-        field = []
-        for j in range(self.__rows):
-            temp_list = []
-            for i in range(self.__columns):
-                cell = FieldCell(row=j, column=i)
-                if (i, j) in mine_coordinates:
-                    cell.set_mine()
-                temp_list.append(cell)
-            field.append(temp_list)
+        field = self.__empty_field_generator()
+        for coord in mine_coordinates:
+            r = coord[0]  # Row
+            c = coord[1]  # Column
+            field[c][r].set_mine()
+            for k in range(c - 1, c + 2):
+                for l in range(r - 1, r + 2):
+                    if 0 <= k < self.__rows and 0 <= l < self.__columns and not field[k][l].is_mine():
+                        field[k][l].increase_value()
         return field
 
-    def make_field(self) -> List[List[FieldCell]]:
-        """
-        Возвращает поле с подсказками вокруг мин
-
-        :return:
-                List[List[int]]: Поле с минами и подсказками
-        """
-
-        field = self.__get_field_with_mines()
-
-        rows = len(field)
-        for i in range(rows):
-            columns = len(field[i])
-            for j in range(columns):
-                if field[i][j].is_mine():
-                    temp_i = i
-                    temp_j = j
-                    # Идем по диапазонам от -1 до 1 от текущих значений i и j
-                    for k in range(temp_i - 1, temp_i + 2):
-                        for l in range(temp_j - 1, temp_j + 2):
-                            # Проверяем позицию ячейки, содержание в ней мины
-                            if 0 <= k < rows and 0 <= l < columns and not field[k][l].is_mine():
-                                field[k][l].increase_value()
-
-        return field
-
-    @staticmethod
-    def print_field(field: List[List[FieldCell]]) -> None:
+    def print_field(self) -> None:
         """
         Печатает в консоль поле с минами и подсказками
-
-        :param field (List[List[FieldCell]]): Поле с минами и подсказками
-        :return:
-                None
         """
-        for row in field:
+        for row in self.__field:
             for cell in row:
                 print(cell, end="  ")
             print()

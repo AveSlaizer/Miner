@@ -2,9 +2,9 @@ from generators.field_generator import FieldGenerator
 
 
 def execute_application():
-    field = FieldGenerator(10, 10, 9).make_field()
+    field = FieldGenerator(5, 5, 5)
 
-    FieldGenerator.print_field(field)
+    field.print_field()
 
 
 if __name__ == "__main__":

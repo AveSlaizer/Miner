@@ -17,10 +17,10 @@ class FieldCell:
               f"Статус: {self.status}")
 
     def set_mine(self):
-        if self.__value == 0:
+        if not self.is_mine():
             self.__value = -1
         else:
-            raise Exception("Для установки мины значение ячейки должно быть равным 0")
+            raise ValueError("Ошибка! В ячейке уже установлена мина")
 
     def is_mine(self):
         return self.__value == -1
@@ -29,7 +29,7 @@ class FieldCell:
         if self.__value >= 0:
             self.__value += 1
         else:
-            raise Exception("В ячейке установлена мина")
+            raise ValueError("В ячейке установлена мина")
 
     def print_status(self):
         if self.__status:
@@ -37,7 +37,7 @@ class FieldCell:
         else:
             print("Откр.")
 
-    def change_status(self):
+    def open_cell(self):
         self.__status = False
 
     @property
