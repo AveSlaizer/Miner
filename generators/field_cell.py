@@ -44,25 +44,13 @@ class FieldCell:
     def value(self):
         return self.__value
 
-    @value.setter
-    def value(self, value: int):
-        self.__value = value
-
     @property
     def row(self):
         return self.__row
 
-    @row.setter
-    def row(self, row: int):
-        self.__row = row
-
     @property
     def column(self):
         return self.__column
-
-    @column.setter
-    def column(self, column: int):
-        self.__column = column
 
     @property
     def status(self):
